@@ -100,43 +100,53 @@ public class MP1 {
             }
         }
 
-        // place the top 20 words into the 'ret' array
-         Set< String > wordsFound = wordCountMap.keySet();
-
-        List<String> wordsFoundList = new ArrayList<String>(wordCountMap.keySet());
         List<Integer> wordsFoundCounts = new ArrayList<Integer>(wordCountMap.values());
-        Collections.sort(wordsFoundList);
         Collections.sort(wordsFoundCounts);
+        Collections.reverse(wordsFoundCounts);
+        Iterator topWordsIter = wordsFoundCounts.iterator();
+        for(int k=0; k < 20; k++)
+        {
+            Object key = topWordsIter.next();
+            System.out.println(key);
+            System.out.println(key);
+        }
+        // place the top 20 words into the 'ret' array
+   //       Set< String > wordsFound = wordCountMap.keySet();
 
-        LinkedHashMap sortedWordsFound = new LinkedHashMap();
-        Iterator valueIt = wordsFoundCounts.iterator();
-        while (valueIt.hasNext()) {
-            Object val = valueIt.next();
-            Iterator keyIt = wordsFoundList.iterator();
-            while (keyIt.hasNext()) {
-                Object key = keyIt.next();
-                String comp1 = wordCountMap.get(key);
-                Integer comp2 = val.toString();
-                if (comp1.equals(comp2)){
-                    passedMap.remove(key);
-                    mapKeys.remove(key);
-                    sortedMap.put((String)key, (Double)val);
-                    break;
-                }
+   //      List<String> wordsFoundList = new ArrayList<String>(wordCountMap.keySet());
+   //      List<Integer> wordsFoundCounts = new ArrayList<Integer>(wordCountMap.values());
+   //      Collections.sort(wordsFoundList);
+         
 
-       }
+   //      LinkedHashMap sortedWordsFound = new LinkedHashMap();
+   //      Iterator valueIt = wordsFoundCounts.iterator();
+   //      while (valueIt.hasNext()) {
+   //          Object val = valueIt.next();
+   //          Iterator keyIt = wordsFoundList.iterator();
+   //          while (keyIt.hasNext()) {
+   //              Object key = keyIt.next();
+   //              Integer comp1 = wordCountMap.get(key);
+   //              Integer comp2 = val.toInteger();
+   //              if (comp1.equals(comp2)){
+   //                  wordCountMap.remove(key);
+   //                  wordsFoundList.remove(key);
+   //                  sortedWordsFound.put((Integer)key, (String)val);
+   //                  break;
+   //              }
 
-   }
+   //     }
 
-        TreeSet< String > sortedWords = new TreeSet< String >(wordsFound);
-        System.out.println( "\nMap contains:\nKey\t\tValue" );
+   // }
+
+   //      TreeSet< String > sortedWords = new TreeSet< String >(wordsFound);
+   //      System.out.println( "\nMap contains:\nKey\t\tValue" );
 
 
-        for ( String key : sortedWords )
-        System.out.printf( "%-10s%10s\n", key, wordCountMap.get( key ) );
-        // create HashMap to store String keys and Integer value
-        System.out.printf(
-         "\nsize: %d\nisEmpty: %b\n", wordCountMap.size(), wordCountMap.isEmpty() );
+   //      for ( String key : sortedWords )
+   //      System.out.printf( "%-10s%10s\n", key, wordCountMap.get( key ) );
+   //      // create HashMap to store String keys and Integer value
+   //      System.out.printf(
+   //       "\nsize: %d\nisEmpty: %b\n", wordCountMap.size(), wordCountMap.isEmpty() );
 
         for (int i = 0; i < 20; i++)
         {
