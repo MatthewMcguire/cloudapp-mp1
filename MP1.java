@@ -18,9 +18,29 @@ public class MP1 {
             "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again",
             "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each",
             "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than",
-            "too", "very", "s", "t", "can", "will", "just", "don", "should", "now", " "};
+            "too", "very", "s", "t", "can", "will", "just", "don", "should", "now", ""};
     List< String > stopWordsList = Arrays.asList( stopWordsArray );
     Set<String> stopWordsSet = new HashSet<String>(stopWordsList);
+
+    class wordPopular {
+      String word;
+      int count;
+      wordPopular(String w, int c)
+      {
+        word = w;
+        count = c;
+      }
+    }
+    Comparator<wordPopular> topDown = new Comparator<wordPopular>()
+    {
+      @Override
+      public int compare(wordPopular w1, wordPopular w2)
+      {
+        if(w1.count > w2.count) return -1;
+        if(w1.count < w2.count) return 1;
+        return w1.word.compareTo(w2.word);
+      }
+    };
 
     void initialRandomGenerator(String seed) throws NoSuchAlgorithmException {
         MessageDigest messageDigest = MessageDigest.getInstance("SHA");
@@ -79,10 +99,10 @@ public class MP1 {
         {
             singleTitle = titles[thisTitle];
         // trim whitespace and lower the case of the title
-            singleTitle.trim();
-            singleTitle.toLowerCase();
+            singleTitle = singleTitle.trim();
+            singleTitle  = singleTitle.toLowerCase();
         // separate it into words
-            titleTokens = singleTitle.split("[\\t\\,;\\.\\?!\\-:@\\[\\]\\(\\)\\{\\}_\\*/\\s]");
+            titleTokens = singleTitle.split("[\\s*\\t\\,;\\.\\?!\\-:@\\[\\]\\(\\)\\{\\}_\\*/]");
         // loop through the words
             for(String token : titleTokens)
             {
@@ -100,57 +120,27 @@ public class MP1 {
             }
         }
 
-        List<Integer> wordsFoundCounts = new ArrayList<Integer>(wordCountMap.values());
-        Collections.sort(wordsFoundCounts);
-        Collections.reverse(wordsFoundCounts);
-        Iterator topWordsIter = wordsFoundCounts.iterator();
-        for(int k=0; k < 20; k++)
+        // create a new version of wordCountMap that is ordered by:
+        // 1) descending count component
+        // 2) lexicographical ordering on the word component
+        TreeSet<wordPopular> wordCountSet = new TreeSet<wordPopular>(topDown);
+
+        List<String> wordCountMapKeys = new ArrayList<String>(wordCountMap.keySet());
+        Iterator wordCountMapKeysIter = wordCountMapKeys.iterator();
+        while (wordCountMapKeysIter.hasNext())
         {
-            Object key = topWordsIter.next();
-            System.out.println(key);
-            System.out.println(key);
+          String nextWord = wordCountMapKeysIter.next().toString();
+          int nextCount = wordCountMap.get(nextWord);
+          wordPopular m1 = new wordPopular(nextWord, nextCount);
+          wordCountSet.add(m1);
         }
+
         // place the top 20 words into the 'ret' array
-   //       Set< String > wordsFound = wordCountMap.keySet();
-
-   //      List<String> wordsFoundList = new ArrayList<String>(wordCountMap.keySet());
-   //      List<Integer> wordsFoundCounts = new ArrayList<Integer>(wordCountMap.values());
-   //      Collections.sort(wordsFoundList);
-         
-
-   //      LinkedHashMap sortedWordsFound = new LinkedHashMap();
-   //      Iterator valueIt = wordsFoundCounts.iterator();
-   //      while (valueIt.hasNext()) {
-   //          Object val = valueIt.next();
-   //          Iterator keyIt = wordsFoundList.iterator();
-   //          while (keyIt.hasNext()) {
-   //              Object key = keyIt.next();
-   //              Integer comp1 = wordCountMap.get(key);
-   //              Integer comp2 = val.toInteger();
-   //              if (comp1.equals(comp2)){
-   //                  wordCountMap.remove(key);
-   //                  wordsFoundList.remove(key);
-   //                  sortedWordsFound.put((Integer)key, (String)val);
-   //                  break;
-   //              }
-
-   //     }
-
-   // }
-
-   //      TreeSet< String > sortedWords = new TreeSet< String >(wordsFound);
-   //      System.out.println( "\nMap contains:\nKey\t\tValue" );
-
-
-   //      for ( String key : sortedWords )
-   //      System.out.printf( "%-10s%10s\n", key, wordCountMap.get( key ) );
-   //      // create HashMap to store String keys and Integer value
-   //      System.out.printf(
-   //       "\nsize: %d\nisEmpty: %b\n", wordCountMap.size(), wordCountMap.isEmpty() );
-
+        Iterator<wordPopular> wordCountSetIter = wordCountSet.iterator();
         for (int i = 0; i < 20; i++)
-        {
-
+        { 
+          wordPopular wps = wordCountSetIter.next();
+          ret[i] = wps.word;
         }
 
         return ret;
